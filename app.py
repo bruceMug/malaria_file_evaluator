@@ -1,14 +1,12 @@
 import streamlit as st
 import pandas as pd
+import matplotlib.pyplot as plt
 
 # Load the original file
 original_file = pd.read_csv('Test.csv')
 
 # Function to check the uploaded file
 def check_uploaded_file(uploaded_file):
-    # Read the uploaded file
-    # uploaded_df = pd.read_csv(uploaded_file)
-    
     # Check if the number of columns is the same
     if len(uploaded_df.columns) != len(original_file.columns):
         return f"Error: The number of columns in the uploaded file does not match the Test.csv file. Test file has {len(original_file.columns)} columns while your file has {len(uploaded_df.columns)} columns."
@@ -31,7 +29,16 @@ def display_statistics(uploaded_df):
     st.write("Number of unique classes in 'class' column and their counts:")
     st.write(uploaded_df['class'].value_counts())
 
+    # Display confidence value distribution
+    fig, ax = plt.subplots()
+    uploaded_df['confidence'].hist(bins=10, ax=ax)
+    ax.set_xlabel('Confidence')
+    ax.set_ylabel('Count')
+    ax.set_title('Distribution of Confidence Values')
+    st.pyplot(fig)
+
 st.title("Malaria Challenge File Evaluator")
+st.image('header.png', use_column_width=True)
 st.write("Before one submits a submission.csv to zindi for the challenge. Run the file through this application and if it passes all the tests, then you are good to go. ")
 st.write("The application will check for the following: ")
 st.write("1. The file should have the same number of columns as the test data")
